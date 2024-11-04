@@ -1,11 +1,10 @@
 [build]
   command = "npm run build"
   publish = "dist"
-  
+
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--no-audit --no-fund"
-  VITE_APP_ENV = "production"
 
 [[redirects]]
   from = "/*"
@@ -16,33 +15,9 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
+    X-Frame-Options = "SAMEORIGIN"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type, Authorization"
-    Content-Security-Policy = """
-      default-src 'self';
-      connect-src 'self' https://*.pingomatic.com https://*.weblogs.com https://*.feedburner.com https://*.google.com https://*.bing.com https://*.yandex.ru https://*.moreover.com https://*.newsgator.com https://*.yahoo.com https://*.blogdigger.com https://*.technorati.com https://*.bloggers.jp https://*.fc2.com https://*.wordpress.com https://*.typepad.com;
-      img-src 'self' data: https: blob:;
-      script-src 'self' 'unsafe-inline' 'unsafe-eval';
-      style-src 'self' 'unsafe-inline';
-      font-src 'self' data:;
-      frame-src 'self';
-      worker-src 'self' blob:;
-    """
-
-[context.production]
-  command = "npm run build"
-  environment = { VITE_APP_ENV = "production" }
-
-[context.deploy-preview]
-  command = "npm run build"
-  environment = { VITE_APP_ENV = "preview" }
-
-[context.branch-deploy]
-  command = "npm run build"
-  environment = { VITE_APP_ENV = "preview" }
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Content-Security-Policy = "default-src 'self'; connect-src 'self' https:; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:;"
