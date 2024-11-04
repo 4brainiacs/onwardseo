@@ -10,7 +10,7 @@ export function ProgressBar({ progress, urls }: ProgressBarProps) {
   const percentage = (progress.completed / progress.total) * 100;
 
   return (
-    <div className="w-full max-w-4xl space-y-4">
+    <div className="w-full max-w-4xl space-y-3">
       <div className="space-y-2">
         <div className="flex justify-between text-sm text-gray-600">
           <span>{progress.completed} of {progress.total} Completed</span>
@@ -24,21 +24,31 @@ export function ProgressBar({ progress, urls }: ProgressBarProps) {
         </div>
       </div>
       
-      <div className="space-y-2">
+      <div className="space-y-1.5 max-h-[250px] sm:max-h-[300px] overflow-y-auto pr-2 rounded-lg">
         {urls.map((url, index) => (
           <div 
             key={url}
-            className={`text-sm ${url === progress.currentUrl ? 'text-blue-600 font-medium' : 'text-gray-500'}`}
+            className={`p-2 sm:p-2.5 rounded-lg ${
+              url === progress.currentUrl 
+                ? 'bg-blue-50 border border-blue-100' 
+                : 'hover:bg-gray-50'
+            }`}
           >
-            <div className="flex items-center gap-2">
-              <span className="w-5 text-right">{index + 1}.</span>
-              <span className="truncate">{url}</span>
-            </div>
-            {url === progress.currentUrl && (
-              <div className="ml-7 text-xs">
-                Currently pinging: {progress.currentService}
+            <div className="flex items-start sm:items-center gap-2">
+              <span className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 flex items-center justify-center bg-gray-100 rounded-full text-xs sm:text-sm font-medium text-gray-700 mt-0.5 sm:mt-0">
+                {index + 1}
+              </span>
+              <div className="flex-1 min-w-0">
+                <span className="text-xs sm:text-sm font-medium text-gray-700 break-all">
+                  {url}
+                </span>
+                {url === progress.currentUrl && (
+                  <div className="mt-1 text-xs text-blue-600 font-medium">
+                    Pinging: {progress.currentService}
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         ))}
       </div>
