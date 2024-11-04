@@ -8,39 +8,27 @@ export default defineConfig(({ mode }) => {
   
   return {
     plugins: [react()],
-    base: './',
+    base: '/',
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src')
       }
     },
     build: {
-      sourcemap: false,
-      minify: 'terser',
-      assetsDir: 'assets',
       outDir: 'dist',
       emptyOutDir: true,
+      minify: 'terser',
       cssCodeSplit: false,
-      modulePreload: {
-        polyfill: false,
-        resolveDependencies: (filename: string, deps: string[], { hostId, hostType }: any) => {
-          return deps;
-        }
-      },
-      chunkSizeWarningLimit: 1000,
+      sourcemap: false,
       rollupOptions: {
         output: {
           manualChunks: {
             vendor: ['react', 'react-dom'],
             icons: ['lucide-react']
-          },
-          entryFileNames: 'assets/[name].[hash].js',
-          chunkFileNames: 'assets/[name].[hash].js',
-          assetFileNames: 'assets/[name].[hash][extname]'
+          }
         }
       },
-      target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
-      reportCompressedSize: false
+      target: 'es2020'
     },
     server: {
       host: true,
