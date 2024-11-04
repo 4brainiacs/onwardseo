@@ -2,13 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="description" content="URL Pinger Tool - Boost your website's visibility and get your pages indexed faster by search engines" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="URL Pinger Tool" />
+    <meta property="og:description" content="Boost your website's visibility and get your pages indexed faster by search engines" />
     <title>URL Pinger Tool</title>
     <style>
-      /* URL Pinger Tool - Core container styles */
-      /* Ensures proper sizing and behavior when used as an iframe */
       .url-pinger-container {
         margin: 0;
         padding: 0;
@@ -17,42 +20,30 @@
         overflow-x: hidden;
         background-color: #FFFFFF;
       }
-
-      /* URL Pinger Tool - Root element styles */
-      /* Controls the main content area and minimum height */
       #root {
         min-height: 100vh;
         width: 100%;
         background-color: #FFFFFF;
       }
-
-      /* URL Pinger Tool - Mobile viewport adjustments */
-      /* Optimized for devices up to 480px width (smartphones) */
       @media screen and (max-width: 480px) {
         .url-pinger-container {
-          min-height: 920px; /* Increased height for better mobile display */
+          min-height: 920px;
         }
       }
-
-      /* URL Pinger Tool - Tablet viewport adjustments */
-      /* Optimized for devices between 481px and 768px (tablets) */
       @media screen and (min-width: 481px) and (max-width: 768px) {
         .url-pinger-container {
-          min-height: 880px; /* Adjusted height for tablet displays */
+          min-height: 880px;
         }
       }
-
-      /* URL Pinger Tool - Desktop viewport adjustments */
-      /* Optimized for devices larger than 768px */
       @media screen and (min-width: 769px) {
         .url-pinger-container {
-          min-height: 800px; /* Standard height for desktop displays */
+          min-height: 800px;
         }
       }
     </style>
   </head>
   <body class="url-pinger-container">
     <div id="root"></div>
-    <script type="module" src="src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

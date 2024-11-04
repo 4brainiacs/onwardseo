@@ -22,6 +22,7 @@
   scrollbar-color: #cbd5e1 #f1f1f1;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .overflow-y-auto::-webkit-scrollbar {
@@ -52,7 +53,37 @@
   background-color: #FFFFFF;
 }
 
-@media screen and (max-width: 480px) {
+/* OnePlus 6T and similar devices */
+@media screen and (max-width: 402px) {
+  .url-pinger-iframe {
+    height: 2000px !important;
+    min-height: 2000px !important;
+  }
+  
+  .max-h-[300px] {
+    max-height: 260px !important;
+  }
+  
+  .max-h-[450px] {
+    max-height: 380px !important;
+  }
+  
+  .grid-cols-2, .grid-cols-3 {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .p-4 {
+    padding: 0.875rem !important;
+  }
+  
+  .text-sm {
+    font-size: 0.8125rem !important;
+    line-height: 1.25rem !important;
+  }
+}
+
+/* Small mobile devices */
+@media screen and (min-width: 403px) and (max-width: 480px) {
   .url-pinger-iframe {
     height: 1800px !important;
     min-height: 1800px !important;
@@ -67,23 +98,11 @@
   }
   
   .grid-cols-2 {
-    grid-template-columns: 1fr;
-  }
-  
-  .space-y-4 > * + * {
-    margin-top: 1rem;
-  }
-  
-  .p-4 {
-    padding: 1rem;
-  }
-  
-  .text-sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    grid-template-columns: 1fr !important;
   }
 }
 
+/* Medium mobile devices */
 @media screen and (min-width: 481px) and (max-width: 768px) {
   .url-pinger-iframe {
     height: 1700px !important;
@@ -91,9 +110,30 @@
   }
 }
 
+/* Larger screens */
 @media screen and (min-width: 769px) {
   .url-pinger-iframe {
     height: 1600px !important;
     min-height: 1600px !important;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    overscroll-behavior-y: contain;
+  }
+  
+  button, 
+  [role="button"] {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+  
+  input,
+  textarea {
+    font-size: 16px !important;
   }
 }
