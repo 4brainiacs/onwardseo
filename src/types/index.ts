@@ -37,3 +37,12 @@ export interface ProgressInfo {
   errors: number;
   successes: number;
 }
+
+export interface LogEntry {
+  timestamp: string;
+  level: 'info' | 'warn' | 'error' | 'debug';
+  message: string;
+  version: string;
+  context?: string;
+  metadata?: Record<string, unknown>;
+}

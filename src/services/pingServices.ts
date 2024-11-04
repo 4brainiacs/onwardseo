@@ -1,4 +1,4 @@
-// Version 1.2.13 - Updated with HTTPS and CORS handling
+// Version 1.2.14 - Updated with HTTPS and CORS handling
 export const PING_SERVICES = [
   // Global Services
   { 

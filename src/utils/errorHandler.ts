@@ -1,4 +1,5 @@
 import { ErrorResponse } from '../types';
+import { logger } from './logger';
 
 export class PingError extends Error {
   constructor(
@@ -14,6 +15,8 @@ export class PingError extends Error {
 }
 
 export function createErrorResponse(error: unknown, service: string): ErrorResponse {
+  logger.error('Error occurred during ping', 'ErrorHandler', { error, service });
+
   if (error instanceof PingError) {
     return {
       code: error.code,
@@ -46,22 +49,13 @@ export function createErrorResponse(error: unknown, service: string): ErrorRespo
 }
 
 export function logError(context: string, error: unknown, metadata?: Record<string, unknown>): void {
-  const timestamp = new Date().toISOString();
-  const errorObj = error instanceof Error ? {
-    name: error.name,
-    message: error.message,
-    stack: error.stack,
-    ...(error instanceof PingError && {
-      code: error.code,
-      details: error.details,
-      service: error.service
-    })
-  } : { message: String(error) };
-
-  console.error(JSON.stringify({
-    timestamp,
+  logger.error(
+    error instanceof Error ? error.message : String(error),
     context,
-    error: errorObj,
-    metadata
-  }));
+    {
+      ...metadata,
+      errorType: error instanceof Error ? error.name : typeof error,
+      stack: error instanceof Error ? error.stack : undefined
+    }
+  );
 }

@@ -26,6 +26,7 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 1000
     },
     server: {
+      host: '0.0.0.0',
       port: 5173,
       strictPort: true,
       headers: {
@@ -35,6 +36,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     preview: {
+      host: '0.0.0.0',
       port: 4173,
       strictPort: true,
       headers: {

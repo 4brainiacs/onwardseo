@@ -8,11 +8,11 @@ export function EmbedCode() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 480) {
-        setIframeHeight(1800); // Increased height for mobile
+        setIframeHeight(1800);
       } else if (window.innerWidth <= 768) {
-        setIframeHeight(1700); // Increased height for tablet
+        setIframeHeight(1700);
       } else {
-        setIframeHeight(1600); // Increased height for desktop
+        setIframeHeight(1600);
       }
     };
 
@@ -23,7 +23,7 @@ export function EmbedCode() {
   
   const embedCode = `<iframe 
   class="url-pinger-iframe"
-  src="https://stalwart-biscochitos-6548b2.netlify.app" 
+  src="${window.location.origin}" 
   title="URL Pinger Tool"
   style="width: 100%; height: ${iframeHeight}px; border: none; max-width: 100vw; overflow: hidden; background-color: #FFFFFF;"
   scrolling="no"
@@ -33,7 +33,6 @@ export function EmbedCode() {
   importance="high"
 ></iframe>
 <style>
-  /* URL Pinger Tool - Responsive iframe adjustments */
   .url-pinger-iframe {
     width: 100%;
     max-width: 100vw;

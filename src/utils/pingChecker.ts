@@ -1,5 +1,6 @@
 import { PingService } from '../types';
 import { normalizeUrl } from './urlUtils';
+import { logger } from './logger';
 
 export class PingError extends Error {
   constructor(
@@ -15,11 +16,15 @@ export class PingError extends Error {
 
 function simulateResponse(service: PingService, url: string) {
   return new Promise(resolve => {
-    // Simulate varying response times between 500ms and 2000ms
     const delay = Math.random() * 1500 + 500;
     setTimeout(() => {
-      // 90% success rate in simulation
       const success = Math.random() < 0.9;
+      logger.debug('Simulated ping response', 'PingChecker', {
+        service: service.name,
+        url,
+        success,
+        delay
+      });
       resolve({
         success,
         message: success 
@@ -41,7 +46,11 @@ export async function pingService(service: PingService, url: string) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-    // Always use simulation in development or when CORS might be an issue
+    logger.info('Starting ping service', 'PingChecker', {
+      service: service.name,
+      url: normalizedUrl
+    });
+
     if (import.meta.env.DEV || !service.url.startsWith('https://')) {
       return simulateResponse(service, normalizedUrl);
     }
@@ -51,7 +60,7 @@ export async function pingService(service: PingService, url: string) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/xml',
-          'User-Agent': 'OnwardSEO URL Pinger/1.2.13',
+          'User-Agent': 'OnwardSEO URL Pinger/1.2.14',
           'Accept': 'application/xml, text/xml, */*',
           'Accept-Language': 'en-US,en;q=0.5',
           'Origin': window.location.origin,
@@ -72,9 +81,18 @@ export async function pingService(service: PingService, url: string) {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        // Fallback to simulation on error in production
+        logger.warn('Service response not OK, falling back to simulation', 'PingChecker', {
+          service: service.name,
+          url: normalizedUrl,
+          status: response.status
+        });
         return simulateResponse(service, normalizedUrl);
       }
+
+      logger.info('Successful ping response', 'PingChecker', {
+        service: service.name,
+        url: normalizedUrl
+      });
 
       return {
         success: true,
@@ -84,18 +102,28 @@ export async function pingService(service: PingService, url: string) {
       clearTimeout(timeoutId);
     }
   } catch (error) {
-    // Handle network errors gracefully by falling back to simulation
     if (error instanceof Error && (
       error.name === 'TypeError' || 
       error.name === 'AbortError' || 
       error.message.includes('Failed to fetch')
     )) {
+      logger.warn('Network error, falling back to simulation', 'PingChecker', {
+        service: service.name,
+        url,
+        error: error.message
+      });
       return simulateResponse(service, url);
     }
 
     if (error instanceof PingError) {
       throw error;
     }
+
+    logger.error('Ping service error', 'PingChecker', {
+      service: service.name,
+      url,
+      error: error instanceof Error ? error.message : String(error)
+    });
 
     throw new PingError(
       error instanceof Error ? error.message : 'Unknown error',
