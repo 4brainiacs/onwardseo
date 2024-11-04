@@ -1,7 +1,11 @@
 [build]
   command = "npm run build"
   publish = "dist"
-  environment = { NODE_VERSION = "20" }
+  
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--no-audit --no-fund"
+  VITE_APP_ENV = "production"
 
 [[redirects]]
   from = "/*"
@@ -30,11 +34,6 @@
       frame-src 'self';
       worker-src 'self' blob:;
     """
-
-[build.environment]
-  NODE_VERSION = "20"
-  NPM_FLAGS = "--no-audit --no-fund"
-  VITE_APP_ENV = "production"
 
 [context.production]
   command = "npm run build"
