@@ -1,4 +1,4 @@
-export const APP_VERSION = '1.2.14';
+export const APP_VERSION = '1.2.15';
 
 type LogLevel = 'info' | 'warn' | 'error' | 'debug';
 
