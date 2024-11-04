@@ -21,7 +21,9 @@ export default function App() {
     total: 0,
     completed: 0,
     currentUrl: '',
-    currentService: ''
+    currentService: '',
+    errors: 0,
+    successes: 0
   });
   const [activeUrls, setActiveUrls] = useState<string[]>([]);
   const pingControllerRef = useRef<PingController | null>(null);
@@ -79,7 +81,9 @@ export default function App() {
       total: 0,
       completed: 0,
       currentUrl: '',
-      currentService: ''
+      currentService: '',
+      errors: 0,
+      successes: 0
     });
     setActiveUrls([]);
     pingControllerRef.current = null;
@@ -87,8 +91,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center space-y-4">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center space-y-6">
           <div className="text-center">
             <div className="flex justify-center mb-4">
               <div className="rounded-full bg-blue-100 p-3">
@@ -118,7 +122,7 @@ export default function App() {
           />
 
           {isLoading && (
-            <div className="w-full max-w-4xl space-y-4">
+            <div className="w-full max-w-4xl space-y-6">
               <div className="flex items-center justify-between">
                 <PingControls
                   isPaused={isPaused}

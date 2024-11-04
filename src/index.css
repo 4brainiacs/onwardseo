@@ -2,6 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    touch-action: manipulation;
+  }
+  
+  body {
+    @apply antialiased text-base;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none;
+  }
+}
+
+@layer utilities {
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+  
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -22,7 +52,7 @@
   scrollbar-color: #cbd5e1 #f1f1f1;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .overflow-y-auto::-webkit-scrollbar {
@@ -43,16 +73,6 @@
   background: #94a3b8;
 }
 
-.url-pinger-iframe {
-  width: 100%;
-  max-width: 100vw;
-  border: none;
-  overflow: hidden;
-  min-height: 1600px !important;
-  transition: height 0.3s ease;
-  background-color: #FFFFFF;
-}
-
 /* OnePlus 6T and similar devices */
 @media screen and (max-width: 402px) {
   .url-pinger-iframe {
@@ -68,7 +88,7 @@
     max-height: 380px !important;
   }
   
-  .grid-cols-2, .grid-cols-3 {
+  .grid-cols-2, .grid-cols-3, .grid-cols-4 {
     grid-template-columns: 1fr !important;
   }
   
@@ -97,7 +117,7 @@
     max-height: 400px !important;
   }
   
-  .grid-cols-2 {
+  .grid-cols-2, .grid-cols-3, .grid-cols-4 {
     grid-template-columns: 1fr !important;
   }
 }
@@ -108,6 +128,10 @@
     height: 1700px !important;
     min-height: 1700px !important;
   }
+  
+  .grid-cols-3, .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
 
 /* Larger screens */
@@ -115,6 +139,10 @@
   .url-pinger-iframe {
     height: 1600px !important;
     min-height: 1600px !important;
+  }
+  
+  .grid-cols-4 {
+    grid-template-columns: repeat(3, 1fr) !important;
   }
 }
 
@@ -124,16 +152,29 @@
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
     overscroll-behavior-y: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .overflow-y-auto::-webkit-scrollbar {
+    display: none;
   }
   
   button, 
   [role="button"] {
     min-height: 44px;
     touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   
   input,
   textarea {
     font-size: 16px !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  * {
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
   }
 }

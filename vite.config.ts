@@ -8,22 +8,26 @@ export default defineConfig(({ mode }) => {
   
   return {
     plugins: [react()],
-    base: './', // Ensure relative paths
+    base: './',
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src')
       }
     },
     build: {
-      sourcemap: isDev,
+      sourcemap: false,
       minify: 'terser',
       assetsDir: 'assets',
       outDir: 'dist',
       emptyOutDir: true,
       cssCodeSplit: false,
       modulePreload: {
-        polyfill: true
+        polyfill: false,
+        resolveDependencies: (filename: string, deps: string[], { hostId, hostType }: any) => {
+          return deps;
+        }
       },
+      chunkSizeWarningLimit: 1000,
       rollupOptions: {
         output: {
           manualChunks: {
@@ -32,19 +36,11 @@ export default defineConfig(({ mode }) => {
           },
           entryFileNames: 'assets/[name].[hash].js',
           chunkFileNames: 'assets/[name].[hash].js',
-          assetFileNames: 'assets/[name].[hash][extname]',
-          inlineDynamicImports: false
+          assetFileNames: 'assets/[name].[hash][extname]'
         }
       },
-      terserOptions: {
-        compress: {
-          drop_console: !isDev,
-          drop_debugger: !isDev
-        }
-      }
-    },
-    optimizeDeps: {
-      include: ['react', 'react-dom', 'lucide-react']
+      target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
+      reportCompressedSize: false
     },
     server: {
       host: true,

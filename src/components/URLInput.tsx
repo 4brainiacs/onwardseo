@@ -67,8 +67,9 @@ export function URLInput({ onSubmit, onReset, isLoading, isCompleted }: URLInput
             placeholder="Enter up to 5 URLs (one per line)"
             className={`w-full min-h-[200px] rounded-lg border ${
               error ? 'border-red-300' : 'border-gray-300'
-            } p-6 text-sm focus:border-blue-500 focus:ring-blue-500`}
+            } p-4 text-base focus:border-blue-500 focus:ring-blue-500`}
             disabled={isLoading}
+            style={{ fontSize: '16px' }}
           />
         </div>
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -76,33 +77,33 @@ export function URLInput({ onSubmit, onReset, isLoading, isCompleted }: URLInput
             <button
               type="button"
               onClick={handleReset}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg bg-gray-600 px-6 py-3 text-sm font-semibold text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg bg-gray-600 px-6 py-3 text-base font-semibold text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 min-h-[44px]"
             >
-              <RotateCcw className="h-4 w-4" />
+              <RotateCcw className="h-5 w-5" />
               <span>Reset</span>
             </button>
           ) : (
             <button
               type="submit"
               disabled={isLoading || !input.trim() || !!error}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-base font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
             >
               {isLoading ? (
                 <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                   <span>Processing...</span>
                 </>
               ) : (
                 <>
-                  <Send className="h-4 w-4" />
+                  <Send className="h-5 w-5" />
                   <span>Start Pinging</span>
                 </>
               )}
             </button>
           )}
           {error && (
-            <div className="flex items-center gap-1 text-sm text-red-500">
-              <AlertCircle className="h-4 w-4" />
+            <div className="flex items-center gap-1 text-base text-red-500">
+              <AlertCircle className="h-5 w-5" />
               <span>{error}</span>
             </div>
           )}

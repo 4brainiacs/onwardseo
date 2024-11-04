@@ -22,27 +22,27 @@ export function PingControls({
         <button
           onClick={onResume}
           disabled={disabled}
-          className="flex items-center gap-1.5 rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:px-3 sm:py-1.5"
+          className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-base font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] touch-manipulation"
         >
-          <Play className="h-4 w-4" />
+          <Play className="h-5 w-5" />
           <span>Resume</span>
         </button>
       ) : (
         <button
           onClick={onPause}
           disabled={disabled}
-          className="flex items-center gap-1.5 rounded-lg bg-yellow-600 px-4 py-2 text-sm font-semibold text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:px-3 sm:py-1.5"
+          className="flex items-center gap-2 rounded-lg bg-yellow-600 px-4 py-2.5 text-base font-semibold text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] touch-manipulation"
         >
-          <Pause className="h-4 w-4" />
+          <Pause className="h-5 w-5" />
           <span>Pause</span>
         </button>
       )}
       <button
         onClick={onStop}
         disabled={disabled}
-        className="flex items-center gap-1.5 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:px-3 sm:py-1.5"
+        className="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-base font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] touch-manipulation"
       >
-        <Square className="h-4 w-4" />
+        <Square className="h-5 w-5" />
         <span>Stop</span>
       </button>
     </div>

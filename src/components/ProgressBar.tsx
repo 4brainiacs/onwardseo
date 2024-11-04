@@ -24,7 +24,7 @@ export function ProgressBar({ progress, urls }: ProgressBarProps) {
         </div>
       </div>
       
-      <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 rounded-lg overscroll-contain">
+      <div className="space-y-2 max-h-[300px] overflow-y-auto overscroll-contain">
         {urls.map((url, index) => (
           <div 
             key={url}

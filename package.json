@@ -1,7 +1,7 @@
 {
   "name": "url-pinger-tool",
   "private": true,
-  "version": "1.2.21",
+  "version": "1.2.25",
   "type": "module",
   "scripts": {
     "dev": "vite",

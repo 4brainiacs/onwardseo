@@ -7,7 +7,9 @@ export function EmbedCode() {
   
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 480) {
+      if (window.innerWidth <= 402) { // OnePlus 6T and similar
+        setIframeHeight(2000);
+      } else if (window.innerWidth <= 480) {
         setIframeHeight(1800);
       } else if (window.innerWidth <= 768) {
         setIframeHeight(1700);
@@ -42,7 +44,13 @@ export function EmbedCode() {
     transition: height 0.3s ease;
     background-color: #FFFFFF;
   }
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 402px) {
+    .url-pinger-iframe {
+      height: 2000px !important;
+      min-height: 2000px !important;
+    }
+  }
+  @media screen and (min-width: 403px) and (max-width: 480px) {
     .url-pinger-iframe {
       height: 1800px !important;
       min-height: 1800px !important;
@@ -75,20 +83,20 @@ export function EmbedCode() {
   return (
     <div className="fixed bottom-4 right-4 max-w-md bg-white rounded-lg shadow-lg p-4 border border-gray-200">
       <div className="flex justify-between items-center mb-2">
-        <h4 className="text-sm font-semibold text-gray-900">Embed this tool</h4>
+        <h4 className="text-base font-semibold text-gray-900">Embed this tool</h4>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800"
+          className="flex items-center gap-2 text-base text-blue-600 hover:text-blue-800 min-h-[44px] px-3 py-2 touch-manipulation"
         >
           {copied ? (
-            <Check className="h-4 w-4" />
+            <Check className="h-5 w-5" />
           ) : (
-            <Copy className="h-4 w-4" />
+            <Copy className="h-5 w-5" />
           )}
           {copied ? 'Copied!' : 'Copy'}
         </button>
       </div>
-      <pre className="bg-gray-50 p-3 rounded text-xs overflow-x-auto whitespace-pre-wrap break-all">
+      <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto whitespace-pre-wrap break-all">
         {embedCode}
       </pre>
     </div>
