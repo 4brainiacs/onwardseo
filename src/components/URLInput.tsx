@@ -57,53 +57,55 @@ export function URLInput({ onSubmit, onReset, isLoading, isCompleted }: URLInput
     onReset();
   };
 
+  const buttonClasses = "inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 min-h-[36px] transition-colors";
+
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-4xl">
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div className="relative">
           <textarea
             value={input}
             onChange={handleInput}
             placeholder="Enter up to 5 URLs (one per line)"
-            className={`w-full min-h-[200px] rounded-lg border ${
+            className={`w-full min-h-[180px] rounded-lg border ${
               error ? 'border-red-300' : 'border-gray-300'
-            } p-4 text-base focus:border-blue-500 focus:ring-blue-500`}
+            } p-3 text-sm focus:border-blue-500 focus:ring-blue-500`}
             disabled={isLoading}
-            style={{ fontSize: '16px' }}
+            style={{ fontSize: '14px' }}
           />
         </div>
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-start gap-2">
           {isCompleted ? (
             <button
               type="button"
               onClick={handleReset}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg bg-gray-600 px-6 py-3 text-base font-semibold text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 min-h-[44px]"
+              className={`${buttonClasses} bg-gray-600 hover:bg-gray-700 focus:ring-gray-500`}
             >
-              <RotateCcw className="h-5 w-5" />
+              <RotateCcw className="h-4 w-4" />
               <span>Reset</span>
             </button>
           ) : (
             <button
               type="submit"
               disabled={isLoading || !input.trim() || !!error}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-base font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
+              className={`${buttonClasses} bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               {isLoading ? (
                 <>
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                   <span>Processing...</span>
                 </>
               ) : (
                 <>
-                  <Send className="h-5 w-5" />
+                  <Send className="h-4 w-4" />
                   <span>Start Pinging</span>
                 </>
               )}
             </button>
           )}
           {error && (
-            <div className="flex items-center gap-1 text-base text-red-500">
-              <AlertCircle className="h-5 w-5" />
+            <div className="flex items-center gap-1 text-sm text-red-500">
+              <AlertCircle className="h-4 w-4" />
               <span>{error}</span>
             </div>
           )}

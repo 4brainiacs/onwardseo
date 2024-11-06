@@ -1,7 +1,8 @@
 import { PING_SERVICES } from '../services/pingServices';
-import { PingResults, ProgressInfo } from '../types';
+import type { PingResults, ProgressInfo } from '../types';
 import { pingService } from './pingChecker';
-import { logError } from './errorHandler';
+import { handleError, logError } from './errorHandler';
+import { logger } from './logger';
 
 export class PingController {
   private isPaused: boolean = false;
@@ -30,7 +31,7 @@ export class PingController {
   }
 
   private handleError(error: unknown, context: string, metadata?: Record<string, unknown>) {
-    const formattedError = error instanceof Error ? error : new Error(String(error));
+    const formattedError = handleError(error);
     logError(context, formattedError, metadata);
     this.onError?.(formattedError);
   }
@@ -102,25 +103,6 @@ export class PingController {
     }
   }
 
-  private async retryPing(service: typeof PING_SERVICES[0], url: string): Promise<ReturnType<typeof pingService>> {
-    const retryCount = this.currentRetries.get(`${url}-${service.name}`) || 0;
-    
-    if (retryCount >= this.MAX_RETRIES) {
-      const error = new Error(`Max retries (${this.MAX_RETRIES}) exceeded for ${service.name}`);
-      this.handleError(error, 'PingController.retryPing', { service: service.name, url, retryCount });
-      throw error;
-    }
-
-    this.currentRetries.set(`${url}-${service.name}`, retryCount + 1);
-    await new Promise(resolve => setTimeout(resolve, this.RETRY_DELAY));
-    
-    return this.safeExecute(
-      () => pingService(service, url),
-      'PingController.retryPing',
-      { service: service.name, url, retryCount: retryCount + 1 }
-    ) as Promise<ReturnType<typeof pingService>>;
-  }
-
   async start(urls: string[]): Promise<void> {
     if (this.isRunning) {
       throw new Error('Ping process is already running');
@@ -181,43 +163,22 @@ export class PingController {
 
           if (!this.isStopped) {
             if (response === null || !response.success) {
-              try {
-                const retryResponse = await this.retryPing(service, url);
-                if (retryResponse && retryResponse.success) {
-                  results[url][index] = {
-                    status: 'success',
-                    timestamp: Date.now(),
-                    url,
-                    message: retryResponse.message
-                  };
-                  successes++;
-                } else {
-                  results[url][index] = {
-                    status: 'error',
-                    timestamp: Date.now(),
-                    url,
-                    message: retryResponse?.message || 'Retry failed',
-                    error: retryResponse?.error
-                  };
-                  errors++;
-                }
-              } catch (retryError) {
-                results[url][index] = {
-                  status: 'error',
-                  timestamp: Date.now(),
-                  url,
-                  message: retryError instanceof Error ? retryError.message : 'Retry failed'
-                };
-                errors++;
-              }
+              errors++;
+              results[url][index] = {
+                status: 'error',
+                timestamp: Date.now(),
+                url,
+                message: response?.message || 'Failed to ping service',
+                error: response?.error
+              };
             } else {
+              successes++;
               results[url][index] = {
                 status: 'success',
                 timestamp: Date.now(),
                 url,
                 message: response.message
               };
-              successes++;
             }
 
             completed++;

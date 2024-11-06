@@ -1,120 +1,172 @@
-// Version 1.2.14 - Updated with HTTPS and CORS handling
-export const PING_SERVICES = [
-  // Global Services
-  { 
-    name: 'Pingomatic',
-    url: 'https://rpc.pingomatic.com'
-  },
-  {
-    name: 'Weblogs',
-    url: 'https://rpc.weblogs.com/RPC2'
-  },
-  {
-    name: 'Feedburner',
-    url: 'https://ping.feedburner.com'
-  },
-  {
-    name: 'Google Feedburner',
-    url: 'https://feedburner.google.com/fb/a/pingSubmit'
-  },
-  {
-    name: 'Weblogs Form',
-    url: 'https://rpc.weblogs.com/pingSiteForm'
-  },
+import type { PingService } from '../types';
 
-  // Search Engine Services
+export const PING_SERVICES: PingService[] = [
+  // Major Search Engines
   {
-    name: 'Bing Webmaster',
-    url: 'https://www.bing.com/webmaster/ping.aspx'
+    name: 'Google Search',
+    url: 'https://www.google.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
   },
   {
-    name: 'Google Blog Search',
-    url: 'https://blogsearch.google.com/ping/RPC2'
+    name: 'Bing Search',
+    url: 'https://www.bing.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
   },
   {
-    name: 'Google India',
-    url: 'https://blogsearch.google.co.in/ping/RPC2'
+    name: 'Yandex Search',
+    url: 'https://blogs.yandex.ru/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
   },
   {
-    name: 'Google Italy',
-    url: 'https://blogsearch.google.co.it/ping/RPC2'
+    name: 'DuckDuckGo',
+    url: 'https://duckduckgo.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
   },
   {
-    name: 'Yandex Blogs',
-    url: 'https://ping.blogs.yandex.ru/RPC2'
+    name: 'Baidu Search',
+    url: 'https://ping.baidu.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
   },
-
-  // RSS Services
-  {
-    name: 'RSS Blog Update',
-    url: 'https://rpc.rsswebupdate.com/ping'
-  },
-  {
-    name: 'Syndic8',
-    url: 'https://ping.syndic8.com/xmlrpc.php'
-  },
-  {
-    name: 'Moreover',
-    url: 'https://api.moreover.com/ping'
-  },
-  {
-    name: 'NewsGator',
-    url: 'https://services.newsgator.com/ngws/xmlrpcping.aspx'
-  },
-  {
-    name: 'Feed Submitter',
-    url: 'https://www.feedsubmitter.com'
-  },
-  {
-    name: 'Yahoo Updates',
-    url: 'https://api.my.yahoo.com/rss/ping'
-  },
-
-  // Blog Directory Services
-  {
-    name: 'Blogdigger',
-    url: 'https://www.blogdigger.com/RPC2'
-  },
-  {
-    name: 'BlogStreet',
-    url: 'https://www.blogstreet.com/xrbin/xmlrpc.cgi'
-  },
-  {
-    name: 'Technorati',
-    url: 'https://rpc.technorati.com/rpc/ping'
-  },
-  {
-    name: 'Feedster',
-    url: 'https://api.feedster.com/ping'
-  },
-
-  // Asian Services
-  {
-    name: 'BlogsJapan',
-    url: 'https://ping.bloggers.jp/rpc'
-  },
-  {
-    name: 'FC2',
-    url: 'https://ping.fc2.com'
-  },
-  {
-    name: 'Drecom',
-    url: 'https://ping.rss.drecom.jp'
-  },
-
-  // European Services
-  {
-    name: 'Twingly',
-    url: 'https://rpc.twingly.com'
-  },
-
-  // Blog Platform Services
+  // Blog Services
   {
     name: 'WordPress',
-    url: 'https://rpc.wordpress.com'
+    url: 'https://rpc.wordpress.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
   },
   {
-    name: 'TypePad',
-    url: 'https://rpc.typepad.com'
+    name: 'Blogger',
+    url: 'https://blogger.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  {
+    name: 'Medium',
+    url: 'https://medium.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  // Feed Services
+  {
+    name: 'Feedburner',
+    url: 'https://feedburner.google.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  {
+    name: 'RSS Feed',
+    url: 'https://rpc.rssfeeds.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  // Social Media
+  {
+    name: 'Pinterest',
+    url: 'https://pinterest.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  {
+    name: 'LinkedIn',
+    url: 'https://linkedin.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  // Regional Search Engines
+  {
+    name: 'Naver',
+    url: 'https://search.naver.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  {
+    name: 'Yahoo Japan',
+    url: 'https://search.yahoo.co.jp/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  {
+    name: 'Qwant',
+    url: 'https://www.qwant.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  // Directory Services
+  {
+    name: 'DMOZ',
+    url: 'https://rpc.dmoz.org/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  {
+    name: 'Webmaster World',
+    url: 'https://www.webmasterworld.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  // News Services
+  {
+    name: 'Google News',
+    url: 'https://news.google.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  {
+    name: 'Bing News',
+    url: 'https://news.bing.com/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
+  },
+  // Archive Services
+  {
+    name: 'Internet Archive',
+    url: 'https://web.archive.org/ping',
+    corsEnabled: true,
+    method: 'GET',
+    requiresProxy: false,
+    proxyUrl: ''
   }
 ];

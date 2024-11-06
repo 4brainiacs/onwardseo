@@ -1,61 +1,78 @@
-import { ErrorResponse } from '../types';
+import { ERROR_MESSAGES } from '../constants';
+import { AppError, ErrorSeverity } from '../types/errors';
 import { logger } from './logger';
 
-export class PingError extends Error {
-  constructor(
-    message: string,
-    public code: string,
-    public details: string,
-    public service: string
-  ) {
-    super(message);
-    this.name = 'PingError';
-    Object.setPrototypeOf(this, PingError.prototype);
-  }
-}
-
-export function createErrorResponse(error: unknown, service: string): ErrorResponse {
-  logger.error('Error occurred during ping', 'ErrorHandler', { error, service });
-
-  if (error instanceof PingError) {
-    return {
-      code: error.code,
-      details: error.details,
-      service: error.service
-    };
+export function handleError(error: unknown): AppError {
+  if (error instanceof AppError) {
+    logError('ErrorHandler', error, error.metadata);
+    return error;
   }
 
   if (error instanceof Error) {
-    if (error.name === 'AbortError') {
-      return {
-        code: 'TIMEOUT',
-        details: 'The request timed out',
-        service
-      };
+    // Network errors
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      return new AppError(ERROR_MESSAGES.NETWORK, 'NETWORK_ERROR', {
+        severity: ErrorSeverity.HIGH,
+        retryable: true,
+        context: { originalError: error }
+      });
     }
 
-    return {
-      code: 'UNKNOWN_ERROR',
-      details: error.message || 'An unknown error occurred',
-      service
-    };
+    // Timeout errors
+    if (error.name === 'AbortError') {
+      return new AppError(ERROR_MESSAGES.TIMEOUT, 'TIMEOUT_ERROR', {
+        severity: ErrorSeverity.MEDIUM,
+        retryable: true,
+        context: { originalError: error }
+      });
+    }
+
+    return new AppError(error.message, 'UNKNOWN_ERROR', {
+      severity: ErrorSeverity.MEDIUM,
+      context: { originalError: error }
+    });
   }
 
-  return {
-    code: 'SYSTEM_ERROR',
-    details: String(error) || 'An unexpected system error occurred',
-    service
-  };
-}
-
-export function logError(context: string, error: unknown, metadata?: Record<string, unknown>): void {
-  logger.error(
-    error instanceof Error ? error.message : String(error),
-    context,
+  return new AppError(
+    typeof error === 'string' ? error : ERROR_MESSAGES.UNKNOWN,
+    'UNKNOWN_ERROR',
     {
-      ...metadata,
-      errorType: error instanceof Error ? error.name : typeof error,
-      stack: error instanceof Error ? error.stack : undefined
+      severity: ErrorSeverity.HIGH,
+      context: { originalError: error }
     }
   );
 }
+
+export function logError(
+  context: string,
+  error: Error,
+  metadata?: Record<string, unknown>
+): void {
+  const errorInfo = {
+    context,
+    timestamp: Date.now(),
+    metadata: {
+      ...metadata,
+      stack: error.stack
+    }
+  };
+
+  if (error instanceof AppError) {
+    logger.error(error.message, {
+      ...errorInfo,
+      code: error.code,
+      severity: error.severity
+    });
+  } else {
+    logger.error(error.message, errorInfo);
+  }
+}
+
+export function isRetryableError(error: unknown): boolean {
+  if (error instanceof AppError) {
+    return error.retryable && error.severity !== ErrorSeverity.CRITICAL;
+  }
+  return false;
+}
+
+export { AppError, ErrorSeverity };

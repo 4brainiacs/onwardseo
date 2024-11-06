@@ -1,22 +1,25 @@
-export const APP_VERSION = '1.2.21';
+import { APP_VERSION } from '../constants';
 
 type LogLevel = 'info' | 'warn' | 'error' | 'debug';
+type LogContext = Record<string, unknown>;
 
 interface LogEntry {
   timestamp: string;
   level: LogLevel;
   message: string;
   version: string;
-  context?: string;
-  metadata?: Record<string, unknown>;
+  context?: LogContext;
+  error?: Error;
 }
 
 class Logger {
   private static instance: Logger;
-  private isDebugEnabled: boolean;
+  private readonly isProduction: boolean;
+  private readonly maxLogSize = 100;
+  private logQueue: LogEntry[] = [];
 
   private constructor() {
-    this.isDebugEnabled = import.meta.env.DEV || window.location.search.includes('debug=true');
+    this.isProduction = process.env.NODE_ENV === 'production';
   }
 
   static getInstance(): Logger {
@@ -26,42 +29,86 @@ class Logger {
     return Logger.instance;
   }
 
-  private formatLog(level: LogLevel, message: string, context?: string, metadata?: Record<string, unknown>): LogEntry {
+  private formatError(error: Error): Record<string, unknown> {
     return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      cause: error.cause
+    };
+  }
+
+  private createLogEntry(
+    level: LogLevel,
+    message: string,
+    context?: LogContext,
+    error?: Error
+  ): LogEntry {
+    const entry: LogEntry = {
       timestamp: new Date().toISOString(),
       level,
       message,
       version: APP_VERSION,
-      context,
-      metadata
+      context
     };
+
+    if (error) {
+      entry.error = error;
+    }
+
+    return entry;
   }
 
-  private output(entry: LogEntry): void {
-    if (entry.level === 'debug' && !this.isDebugEnabled) return;
-
-    const logFn = entry.level === 'error' ? console.error :
-                 entry.level === 'warn' ? console.warn :
-                 entry.level === 'debug' ? console.debug :
-                 console.log;
-
-    logFn(JSON.stringify(entry, null, 2));
+  private processLogEntry(entry: LogEntry): void {
+    if (this.isProduction) {
+      this.logQueue.push(entry);
+      if (this.logQueue.length >= this.maxLogSize) {
+        this.flushLogs();
+      }
+    } else {
+      const { level, message, context, error } = entry;
+      const logFn = console[level] || console.log;
+      logFn(
+        `[${entry.timestamp}] ${level.toUpperCase()}: ${message}`,
+        context || '',
+        error ? this.formatError(error) : ''
+      );
+    }
   }
 
-  info(message: string, context?: string, metadata?: Record<string, unknown>): void {
-    this.output(this.formatLog('info', message, context, metadata));
+  private async flushLogs(): Promise<void> {
+    if (this.logQueue.length === 0) return;
+
+    try {
+      // In production, you would send logs to your logging service
+      // For now, we'll just console.log them
+      console.log('Flushing logs:', this.logQueue);
+      this.logQueue = [];
+    } catch (error) {
+      console.error('Failed to flush logs:', error);
+    }
   }
 
-  warn(message: string, context?: string, metadata?: Record<string, unknown>): void {
-    this.output(this.formatLog('warn', message, context, metadata));
+  info(message: string, context?: LogContext): void {
+    this.processLogEntry(this.createLogEntry('info', message, context));
   }
 
-  error(message: string, context?: string, metadata?: Record<string, unknown>): void {
-    this.output(this.formatLog('error', message, context, metadata));
+  warn(message: string, context?: LogContext, error?: Error): void {
+    this.processLogEntry(this.createLogEntry('warn', message, context, error));
   }
 
-  debug(message: string, context?: string, metadata?: Record<string, unknown>): void {
-    this.output(this.formatLog('debug', message, context, metadata));
+  error(message: string, context?: LogContext, error?: Error): void {
+    this.processLogEntry(this.createLogEntry('error', message, context, error));
+  }
+
+  debug(message: string, context?: LogContext): void {
+    if (!this.isProduction) {
+      this.processLogEntry(this.createLogEntry('debug', message, context));
+    }
+  }
+
+  async dispose(): Promise<void> {
+    await this.flushLogs();
   }
 }
 

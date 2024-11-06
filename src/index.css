@@ -2,21 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base styles */
 @layer base {
+  :root {
+    color-scheme: light;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     touch-action: manipulation;
+    height: 100%;
   }
   
   body {
-    @apply antialiased text-base;
+    @apply antialiased text-base min-h-screen bg-white;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     overscroll-behavior-y: none;
+  }
+
+  #root {
+    @apply min-h-screen flex flex-col;
+  }
+
+  ::selection {
+    @apply bg-blue-100;
   }
 }
 
+/* Component styles */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700 shadow-sm;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-900 hover:bg-gray-200 shadow-sm;
+  }
+}
+
+/* Utility styles */
 @layer utilities {
   .touch-manipulation {
     touch-action: manipulation;
@@ -32,6 +65,7 @@
   }
 }
 
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -47,6 +81,7 @@
   animation: fadeIn 0.3s ease-out forwards;
 }
 
+/* Scrollbar styling */
 .overflow-y-auto {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 #f1f1f1;
@@ -73,8 +108,8 @@
   background: #94a3b8;
 }
 
-/* OnePlus 6T and similar devices */
-@media screen and (max-width: 402px) {
+/* Mobile optimizations */
+@media (max-width: 402px) {
   .url-pinger-iframe {
     height: 2000px !important;
     min-height: 2000px !important;
@@ -88,7 +123,9 @@
     max-height: 380px !important;
   }
   
-  .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+  .grid-cols-2, 
+  .grid-cols-3, 
+  .grid-cols-4 {
     grid-template-columns: 1fr !important;
   }
   
@@ -99,50 +136,6 @@
   .text-sm {
     font-size: 0.8125rem !important;
     line-height: 1.25rem !important;
-  }
-}
-
-/* Small mobile devices */
-@media screen and (min-width: 403px) and (max-width: 480px) {
-  .url-pinger-iframe {
-    height: 1800px !important;
-    min-height: 1800px !important;
-  }
-  
-  .max-h-[300px] {
-    max-height: 280px !important;
-  }
-  
-  .max-h-[450px] {
-    max-height: 400px !important;
-  }
-  
-  .grid-cols-2, .grid-cols-3, .grid-cols-4 {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-/* Medium mobile devices */
-@media screen and (min-width: 481px) and (max-width: 768px) {
-  .url-pinger-iframe {
-    height: 1700px !important;
-    min-height: 1700px !important;
-  }
-  
-  .grid-cols-3, .grid-cols-4 {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-}
-
-/* Larger screens */
-@media screen and (min-width: 769px) {
-  .url-pinger-iframe {
-    height: 1600px !important;
-    min-height: 1600px !important;
-  }
-  
-  .grid-cols-4 {
-    grid-template-columns: repeat(3, 1fr) !important;
   }
 }
 
